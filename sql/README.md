@@ -1,13 +1,16 @@
 # Introduction
 
-This project is designed to help users practice and study their SQL queries. It can be used as a reference for answers 
-to the various questions asked. We utilize SQL queries specifically with the PostgreSQL RDBMS. To follow along with the
-practice questions make sure to run clubdata.sql (Note: Do not run this and table setup as clubdata.sql creates these
+This project is designed to help users practice and study their SQL queries. It can be used as a reference for answers  
+to the various questions asked. We utilize SQL queries specifically with the PostgreSQL RDBMS. To follow along with the  
+practice questions make sure to run clubdata.sql (Note: Do not run this and table setup as clubdata.sql creates these  
 tables for you.
+
+## Architecture
+![erd_diagram](./assets/erd.png)
 
 # SQL Queries
 
-##### Table Setup (DDL)
+### Table Setup (DDL)
 
 ```sql
 CREATE TABLE cd.members(
@@ -43,15 +46,15 @@ CREATE TABLE cd.bookings(
 );
 ```
 
-### Modifying Data
+## Modifying Data
 
-#### Insert 
+### Insert 
 ```sql
 INSERT INTO cd.facilities 
 VALUES 
   (9, 'Spa', 20, 30, 100000, 800);
 ```
-#### Insert3 
+### Insert3 
 ```sql
 INSERT INTO cd.facilities 
 VALUES 
@@ -69,7 +72,7 @@ VALUES
     800
   );
 ```
-#### Update
+### Update
 ```sql
 UPDATE 
   cd.facilities 
@@ -78,7 +81,7 @@ SET
 WHERE 
   facid = 1;
 ```
-#### Update Calculated
+### Update Calculated
 ```sql
 UPDATE 
   cd.facilities 
@@ -89,7 +92,7 @@ WHERE
   facid = 1;
 ```
 
-#### Delete
+### Delete
 ```sql
 DELETE FROM 
   cd.bookings 
@@ -97,7 +100,7 @@ WHERE
   facid IS NOT NULL;
 ```
 
-#### Delete Condition
+### Delete Condition
 ```sql
 DELETE FROM 
   cd.members 
@@ -105,8 +108,8 @@ WHERE
   memid = 37;
 ```
 
-### Basics
-#### Where 2
+## Basics
+### Where 2
 ```sql
 SELECT 
   facid, 
@@ -119,7 +122,7 @@ WHERE
   membercost > 0 
   AND membercost < 0.02 * monthlymaintenance;
 ```
-#### Where 3
+### Where 3
 ```sql
 SELECT 
   * 
@@ -128,7 +131,7 @@ FROM
 WHERE 
   name LIKE '%Tennis%';
 ```
-#### Where 4
+### Where 4
 ```sql
 SELECT 
   * 
@@ -137,7 +140,7 @@ FROM
 WHERE 
   facid IN(1, 5);
 ```
-#### Date
+### Date
 ```sql
 SELECT 
   memid, 
@@ -149,7 +152,7 @@ FROM
 WHERE 
   joindate > '2012-09-01';
 ```
-#### Union
+### Union
 ```sql
 SELECT 
   surname 
@@ -162,8 +165,8 @@ FROM
   cd.facilities;
 ```
 
-### Join
-#### Simple Join
+## Join
+### Simple Join
 ```sql
 SELECT 
   starttime 
@@ -174,7 +177,7 @@ WHERE
   surname = 'Farrell' 
   AND firstname = 'David';
 ```
-#### Simple Join 2
+### Simple Join 2
 ```sql
 SELECT 
   starttime AS start, 
@@ -188,7 +191,7 @@ WHERE
 ORDER BY 
   starttime;
 ```
-#### Self 2
+### Self 2
 ```sql
 SELECT 
   mem.firstname AS memfname, 
@@ -202,7 +205,7 @@ ORDER BY
   memsname, 
   memfname;
 ```
-#### Self
+### Self
 ```sql
 SELECT 
   DISTINCT recs.firstname, 
@@ -214,7 +217,7 @@ ORDER BY
   recs.surname, 
   recs.firstname;
 ```
-#### Sub
+### Sub
 ```sql
 SELECT 
   DISTINCT CONCAT(firstname, ' ', surname) AS member, 
@@ -232,8 +235,8 @@ ORDER BY
   member;
 ```
 
-### Aggregation
-#### Count 3
+## Aggregation
+### Count 3
 ```sql
 SELECT 
   recommendedby, 
@@ -247,7 +250,7 @@ GROUP BY
 ORDER BY 
   recommendedby;
 ```
-#### Fachours
+### Fachours
 ```sql
 SELECT 
   facid, 
@@ -259,7 +262,7 @@ GROUP BY
 ORDER BY 
   facid;
 ```
-#### Fachours By Month
+### Fachours By Month
 ```sql
 SELECT 
   facid, 
@@ -273,7 +276,7 @@ GROUP BY
 ORDER BY 
   "Total Slots";
 ```
-#### Fachours By Month 2
+### Fachours By Month 2
 ```sql
 SELECT 
   facid, 
@@ -295,14 +298,14 @@ GROUP BY
   facid, 
   month;
 ```
-#### Members 1
+### Members 1
 ```sql
 SELECT 
   COUNT(DISTINCT memid) 
 FROM 
   cd.bookings;
 ```
-#### N Booking
+### N Booking
 ```sql
 SELECT 
   surname, 
@@ -321,7 +324,7 @@ GROUP BY
 ORDER BY 
   memid;
 ```
-#### Count Members
+### Count Members
 ```sql
 SELECT 
   COUNT(*) OVER (), 
@@ -332,7 +335,7 @@ FROM
 ORDER BY 
   joindate;
 ```
-#### Num Members
+### Num Members
 ```sql
 SELECT 
   ROW_NUMBER() OVER (
@@ -344,7 +347,7 @@ SELECT
 FROM 
   cd.members;
 ```
-#### Fachours 4
+### Fachours 4
 ```sql
 SELECT 
   r.facid, 
@@ -367,15 +370,15 @@ WHERE
   rank = 1;
 ```
 
-### String
-#### Concat
+## String
+### Concat
 ```sql
 SELECT 
   CONCAT(surname, ', ', firstname) AS name 
 FROM 
   cd.members;
 ```
-#### Reg
+### Reg
 ```sql
 SELECT 
   memid, 
@@ -385,7 +388,7 @@ FROM
 WHERE 
   telephone ~ '\(\d\d\d\)*';
 ```
-#### Substr
+### Substr
 ```sql
 SELECT 
   substring(
