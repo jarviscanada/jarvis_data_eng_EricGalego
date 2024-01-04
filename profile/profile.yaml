@@ -9,11 +9,12 @@ summary: >
   Hi, I'm Eric a computer science specialist graduate from the University of Toronto. I began my software journey in
   high school developing and working with small applications to make my day-to-day life easier. From there I knew I
   wanted to continue my education in the direction of technology as I enjoyed working with new technologies and 
-  automating things I found to be tedious in my day-to-day life. I have a background in security from my first job in
-  tech as an Application Security Analyst and am looking forward to utilizing and expanding my skills and knowledge 
-  from school and the industry to make me an asset to any future company I work with. I am an energetic and 
-  collaborative professional, eager to enter the tech industry, and keen on advancing my skills. I bring a positive and
-  enthusiastic attitude to any workplace I join.
+  automating things I found to be tedious. To accomplish this I utilized numerous technologies such as Python, 
+  JavaScript, Jenkins, AWS services, and incorporated various third party libraries and APIs. I have a background in
+  security from my first job in tech as an Application Security Analyst and am looking forward to utilizing and 
+  expanding my skills and knowledge from school and the industry to make me an asset to any future company I work with.
+  I am an energetic and collaborative professional, eager to continue my journey in the tech industry, and keen on 
+  advancing my skills. Lastly, I bring a very positive and enthusiastic attitude to any workplace I join.
 
 # Group your skills by level.
 # Your skills can be anything software related (e.g. language, frameworks, methodologies, software, etc.).
@@ -54,15 +55,10 @@ jarvis_projects:
     # The project description must start with an action verb (https://bit.ly/3guO98u)
     description: >
       Designed and developed an application to collect and monitor hardware data and machine resource data on designated
-      host machines, leveraging a combination of Bash scripting, Docker, crontab, and PostgreSQL. Using Bash, our 
-      host_info bash script gathers crucial hardware information while host_usage collects host resource usage data to
-      constantly check how the system is performing. Docker is employed for containerization, ensuring portability and
-      scalability of the application across various environments. PostgreSQL is hosted within the Docker container to
-      store the results of this data collection. The continuous monitoring process through crontab checks usage 
-      statistics on host machines, providing real-time insights into resource utilization. It allows users in charge of
-      the cluster of Linux machines to easily access usage statistics from the PSQL database and utilize SQL queries to
-      collect important statistics such as the average amount of idle CPU time across various machines over select
-      periods.
+      host machines, leveraging a combination of Bash scripting, Docker, crontab, and PostgreSQL. It allows users in 
+      charge of the cluster of Linux machines to easily access usage statistics from the PSQL database and utilize SQL
+      queries to collect important statistics such as the average amount of idle CPU time across various machines over
+      select periods.
   - name: "Core Java Apps"
     git_url: "/core_java"
     description: ""
@@ -97,15 +93,14 @@ highlighted_projects:
   - name: "Web app (My Portfolio)"
     git_url: "https://github.com/galegoer/my-portfolio"
     description: >
-      Established a portfolio site hosted via an EC2 instance, utilizing AWS CodeDeploy and Docker to host and 
-      make updates to the site. Implemented communication with various connecting clients via chat rooms with Node.js,
-      Express, and socket.io. Dockerized the website in a container with client and server which was hosted on an EC2
-      instance.
+      Established a portfolio site utilizing AWS CodeDeploy and Docker to host and make updates to the site. 
+      Implemented communication with various connecting clients via chat rooms with Node.js, Express, and socket.io.
+      Dockerized the website in a container with client and server which was hosted on an EC2 instance.
   - name: "Android Application (Pick-E-Eater)"
     git_url: "https://github.com/apps-of-the-millennium/Pick-E-Eater"
     description: > 
-      Developed an Android application that helps picky eaters decide where to eat based on some provided filters. 
-      Implemented the application using Kotlin and Jetpack Compose. 
+      Produced a savvy Android application making restaurant decisions a breeze with personalized filters and local
+      eatery details. Implemented the application using Kotlin and Jetpack Compose. 
 
 #List of professional experience
 #The job description allows hiring managers to understand your job and the technologies you used(e.g. programming languages, libraries, algorithms, hardware, tools, etc.).
@@ -119,11 +114,12 @@ professional_experience:
     description: "Engaged in diverse projects involving SQL, Linux, and Bash. Acquired hands-on
      experience and practical skills in these technologies to excel in software development tasks."
   - title: "Math and Computer Science Tutor"
-    company: "Private and with a Company"
+    company: "Mathnasium"
     duration: "2021-2022"
     description: "Initiated and led comprehensive math tutoring programs as the Head Math Tutor, collaborating with a
     team to create study plans, problem sets, and innovative learning initiatives. Successfully provided concurrent
-    tutoring sessions for multiple students, fostering a collaborative and supportive learning environment."
+    tutoring sessions for multiple students, fostering a collaborative and supportive learning environment in an online
+    and in person setting."
   - title: "Application Security Analyst"
     company: "CaseWare International"
     duration: "2020-2021"
@@ -146,15 +142,13 @@ education:
     # optional
     awards_achievements: 
       - "University of Toronto Entrance Award"
-      - "GPA: 3.1/4.0"
 
 #Optional section
 others:
     #category
   - title: "Activities/Hobbies"
     bullets:
-      - "Reading"
-      - "Art"
-      - "Automation"
-      - "Music"
-      - "TV Shows and Movies"
+      - "Reading, I try to read at least one new book a month"
+      - "Art, I've been learning and working on new forms of visual arts and creative projects"
+      - "Music, I try and listen to one album a day! Open to recommendations, check my portfolio site for weekly 
+      recommendations!"
