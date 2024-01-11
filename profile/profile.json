@@ -33,36 +33,6 @@
       "description": "Designed and developed an application to collect and monitor hardware data and machine resource data on designated host machines, leveraging a combination of Bash scripting, Docker, crontab, and PostgreSQL. It allows users in  charge of the cluster of Linux machines to easily access usage statistics from the PSQL database and utilize SQL queries to collect important statistics such as the average amount of idle CPU time across various machines over select periods.\n",
       "git_url": "/linux_sql",
       "name": "Cluster Monitor"
-    },
-    {
-      "description": "",
-      "git_url": "/core_java",
-      "name": "Core Java Apps"
-    },
-    {
-      "description": "",
-      "git_url": "/springboot",
-      "name": "Springboot App"
-    },
-    {
-      "description": "",
-      "git_url": "/python_data_anlytics",
-      "name": "Python Data Analytics"
-    },
-    {
-      "description": "",
-      "git_url": "/hadoop",
-      "name": "Hadoop"
-    },
-    {
-      "description": "",
-      "git_url": "/spark",
-      "name": "Spark"
-    },
-    {
-      "description": "",
-      "git_url": "/cloud_devops",
-      "name": "Cloud/DevOps"
     }
   ],
   "name": "Eric Galego",
