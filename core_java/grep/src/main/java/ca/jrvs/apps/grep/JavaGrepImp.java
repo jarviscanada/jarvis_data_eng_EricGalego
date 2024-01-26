@@ -5,13 +5,16 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.apache.log4j.BasicConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,35 +72,28 @@ public class JavaGrepImp implements JavaGrep {
 
   @Override
   public List<File> listFiles(String rootDir, List<File> files) {
-    File dir = new File(rootDir);
-    for (File file : Objects.requireNonNull(dir.listFiles())) {
-      if (file.isDirectory()) {
-        listFiles(String.valueOf(file), files);
-      } else {
-        files.add(file);
-      }
+    try (Stream<Path> walk = Files.walk(Paths.get(rootDir), Integer.MAX_VALUE,
+        FileVisitOption.FOLLOW_LINKS)) {
+      return walk
+          .filter(Files::isRegularFile)
+          .map(Path::toFile)
+          .collect(Collectors.toList());
+    } catch (IOException e) {
+      e.printStackTrace();
+      return null;
     }
-    return files;
   }
 
   @Override
   public List<String> readLines(File inputFile) {
-    BufferedReader reader;
-    List<String> matchingLines = new ArrayList<>();
-    try {
-      reader = new BufferedReader(new FileReader(inputFile));
-      String line = reader.readLine();
-      while (line != null) {
-        line = reader.readLine();
-        if (containsPattern(line)) {
-          matchingLines.add(line);
-        }
-      }
-      reader.close();
+    try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))) {
+      return reader.lines()
+          .filter(this::containsPattern)
+          .collect(Collectors.toList());
     } catch (IOException e) {
-      logger.error(String.valueOf(e));
+      e.printStackTrace();
+      return null;
     }
-    return matchingLines;
   }
 
   @Override
@@ -112,12 +108,10 @@ public class JavaGrepImp implements JavaGrep {
 
   @Override
   public void writeToFile(List<String> lines) throws IOException {
-    try {
-      FileWriter fileWriter = new FileWriter(getOutFile());
+    try(FileWriter fileWriter = new FileWriter(getOutFile())) {
       for (String line : lines) {
         fileWriter.write(line +'\n');
       }
-      fileWriter.close();
     } catch (IOException e) {
       logger.error(String.valueOf(e));
       throw new IOException(e);
@@ -138,7 +132,7 @@ public class JavaGrepImp implements JavaGrep {
 
     try {
       javaGrepImp.process();
-    } catch (Exception ex) {
+    } catch (IOException ex) {
       javaGrepImp.logger.error("Error: Unable to process", ex);
     }
   }
