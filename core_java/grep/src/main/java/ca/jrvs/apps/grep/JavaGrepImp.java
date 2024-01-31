@@ -1,10 +1,9 @@
 package ca.jrvs.apps.grep;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -13,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.log4j.BasicConfigurator;
 import org.slf4j.Logger;
@@ -62,37 +60,38 @@ public class JavaGrepImp implements JavaGrep {
     if(!Files.exists(Paths.get(getRootPath()))) {
       throw new IOException(String.format("Error: %s No such file or directory", getRootPath()));
     }
-    List<File> files = listFiles(getRootPath(), new ArrayList<>());
     List<String> matchingLines = new ArrayList<>();
-    for (File file : files) {
-      matchingLines.addAll(readLines(file));
-    }
+    listFiles(getRootPath()).forEach(file-> {
+      try {
+        readLines(file).forEach(matchingLines::add);
+      //typically files non UTF-8 that can't be read
+      } catch (UncheckedIOException e) {
+        logger.error(String.valueOf(e));
+      }
+    });
     writeToFile(matchingLines);
   }
 
   @Override
-  public List<File> listFiles(String rootDir, List<File> files) {
-    try (Stream<Path> walk = Files.walk(Paths.get(rootDir), Integer.MAX_VALUE,
-        FileVisitOption.FOLLOW_LINKS)) {
-      return walk
-          .filter(Files::isRegularFile)
-          .map(Path::toFile)
-          .collect(Collectors.toList());
+  public Stream<File> listFiles(String rootDir) {
+    try {
+      return Files.walk(Paths.get(rootDir), Integer.MAX_VALUE, FileVisitOption.FOLLOW_LINKS)
+        .filter(Files::isRegularFile)
+        .map(Path::toFile);
     } catch (IOException e) {
-      e.printStackTrace();
-      return null;
+      logger.error(e.toString());
+      return Stream.empty();
     }
   }
 
+  // return stream
   @Override
-  public List<String> readLines(File inputFile) {
-    try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))) {
-      return reader.lines()
-          .filter(this::containsPattern)
-          .collect(Collectors.toList());
+  public Stream<String> readLines(File inputFile) {
+    try {
+      return Files.lines(inputFile.toPath()).filter(this::containsPattern);
     } catch (IOException e) {
-      e.printStackTrace();
-      return null;
+      logger.error(String.valueOf(e));
+      return Stream.empty(); // Return an empty stream on exception
     }
   }
 

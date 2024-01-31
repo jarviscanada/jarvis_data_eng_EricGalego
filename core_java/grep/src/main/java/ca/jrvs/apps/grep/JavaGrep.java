@@ -3,6 +3,7 @@ package ca.jrvs.apps.grep;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Stream;
 
 public interface JavaGrep {
 
@@ -15,18 +16,17 @@ public interface JavaGrep {
   /**
    * Traverse a given directory and return all files
    * @param rootDir input directory
-   * @param files list of files in the directory
-   * @return files under the rootDir
+   * @return stream of files under the rootDir
    */
-  List<File> listFiles(String rootDir, List<File> files);
+  Stream<File> listFiles(String rootDir);
 
   /**
    * Read a file and return all the lines
    *
    * @param inputFile file to be read
-   * @return lines
+   * @return stream of lines from inputFile
    */
-  List<String> readLines(File inputFile);
+  Stream<String> readLines(File inputFile);
 
   /**
    * check if a lines contains the regex pattern (passed by user)
