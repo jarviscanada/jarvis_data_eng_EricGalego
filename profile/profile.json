@@ -33,6 +33,11 @@
       "description": "Designed and developed an application to collect and monitor hardware data and machine resource data on designated host machines, leveraging a combination of Bash scripting, Docker, crontab, and PostgreSQL. It allows users in  charge of the cluster of Linux machines to easily access usage statistics from the PSQL database and utilize SQL queries to collect important statistics such as the average amount of idle CPU time across various machines over select periods.\n",
       "git_url": "/linux_sql",
       "name": "Cluster Monitor"
+    },
+    {
+      "description": "Designed and developed an application to mimic the functionality of the grep command line utility in Linux. This project is designed to collect and report lines that match a specified regex recursively in a provided directory. The application leverages a combination of Java 8, Docker, streams/lambdas, regex, and SLF4j. This provides users with a quick and efficient way to locate and extract information  from large sets of text-based data.\n",
+      "git_url": "/core_java/grep",
+      "name": "Core Java Apps"
     }
   ],
   "name": "Eric Galego",

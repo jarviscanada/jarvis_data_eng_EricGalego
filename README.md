@@ -19,6 +19,9 @@ Project source code: [https://github.com/jarviscanada/jarvis_data_eng_EricGalego
 **Cluster Monitor** [[GitHub](https://github.com/jarviscanada/jarvis_data_eng_EricGalego/tree/master/linux_sql)]: Designed and developed an application to collect and monitor hardware data and machine resource data on designated host machines, leveraging a combination of Bash scripting, Docker, crontab, and PostgreSQL. It allows users in  charge of the cluster of Linux machines to easily access usage statistics from the PSQL database and utilize SQL queries to collect important statistics such as the average amount of idle CPU time across various machines over select periods.
 
 
+**Core Java Apps** [[GitHub](https://github.com/jarviscanada/jarvis_data_eng_EricGalego/tree/master/core_java/grep)]: Designed and developed an application to mimic the functionality of the grep command line utility in Linux. This project is designed to collect and report lines that match a specified regex recursively in a provided directory. The application leverages a combination of Java 8, Docker, streams/lambdas, regex, and SLF4j. This provides users with a quick and efficient way to locate and extract information  from large sets of text-based data.
+
+
 
 ## Highlighted Projects
 **Web app for media (MotM)** [[GitHub](https://github.com/apps-of-the-millennium/motm)]: Launched a social media platform utilizing Firebase, React, JavaScript, HTML, and CSS that helps users connect  over their favourite pieces of media including movies, shows, video games, books, and music. Utilized Firebase  Hosting and GitHub Actions to create live PRs and updates to a live site.
