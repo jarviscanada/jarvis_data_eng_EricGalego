@@ -1,5 +1,4 @@
-package org.example;
-
+package ca.jrvs.apps.jdbc;
 
 public class SimpleCalculatorImpl implements SimpleCalculator {
   @Override

@@ -1,4 +1,4 @@
-package org.example;
+package ca.jrvs.apps.jdbc;
 
 public interface SimpleCalculator {
   int add(int x, int y);

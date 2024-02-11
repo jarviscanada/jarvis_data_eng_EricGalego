@@ -1,4 +1,4 @@
-package org.example;
+package ca.jrvs.apps.jdbc;
 
 public class NotSoSimpleCalculatorImpl implements NotSoSimpleCalculator {
   private SimpleCalculator calc;
