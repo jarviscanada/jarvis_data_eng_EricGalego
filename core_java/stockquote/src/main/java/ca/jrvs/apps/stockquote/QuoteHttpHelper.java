@@ -12,6 +12,20 @@ public class QuoteHttpHelper {
 
   private String apiKey;
   private OkHttpClient client;
+  public String respStr = "{\n"
+      + "    \"Global Quote\": {\n"
+      + "        \"01. symbol\": \"MSFT\",\n"
+      + "        \"02. open\": \"404.8400\",\n"
+      + "        \"03. high\": \"405.0710\",\n"
+      + "        \"04. low\": \"403.4000\",\n"
+      + "        \"05. price\": \"406.3200\",\n"
+      + "        \"06. volume\": \"27774589\",\n"
+      + "        \"07. latest trading day\": \"2024-02-13\",\n"
+      + "        \"08. previous close\": \"415.2600\",\n"
+      + "        \"09. change\": \"-8.9400\",\n"
+      + "        \"10. change percent\": \"-2.1529%\"\n"
+      + "    }\n"
+      + "}\n";
 
 
   /**
@@ -32,12 +46,16 @@ public class QuoteHttpHelper {
       String respStr = response.body().string();
       System.out.println(respStr);
 
+      // TODO: just use jackson-databind rather than json dependency
       JSONObject jsonResp = new JSONObject(respStr);
       // if symbol or api key was bad which gives empty response or error message
       if (jsonResp.has("Error Message") || jsonResp.getJSONObject("Global Quote").length() == 0) {
         throw new IllegalArgumentException("No data was found with this symbol.");
       }
-      return toObjectFromJson(jsonResp.getJSONObject("Global Quote").toString(), Quote.class);
+      jsonResp = jsonResp.getJSONObject("Global Quote");
+      jsonResp.put("timestamp", new java.sql.Date(new java.util.Date().getTime()));
+
+      return toObjectFromJson(jsonResp.toString(), Quote.class);
     } catch (IOException e) {
       e.printStackTrace();
     }

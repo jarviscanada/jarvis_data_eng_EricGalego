@@ -9,6 +9,7 @@ import java.sql.Timestamp;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
+    "01. symbol",
     "02. open",
     "03. high",
     "04. low",
@@ -22,10 +23,12 @@ import java.sql.Timestamp;
 
 public class Quote {
 
+  @JsonProperty("01. symbol")
   public String getTicker() {
     return ticker;
   }
 
+  @JsonProperty("01. symbol")
   public void setTicker(String ticker) {
     this.ticker = ticker;
   }
@@ -126,6 +129,7 @@ public class Quote {
     this.timestamp = timestamp;
   }
 
+  @JsonProperty("01. symbol")
   private String ticker; //id
 
   @JsonProperty("02. open")
@@ -157,5 +161,23 @@ public class Quote {
 
   private Timestamp timestamp; //time when the info was pulled
 
+
+  @Override
+  public String toString() {
+    final StringBuilder sb = new StringBuilder("Quote{");
+    sb.append("symbol='").append(ticker).append('\'');
+    sb.append(", open='").append(open).append('\'');
+    sb.append(", high='").append(high).append('\'');
+    sb.append(", low='").append(low).append('\'');
+    sb.append(", price='").append(price).append('\'');
+    sb.append(", volume='").append(volume).append('\'');
+    sb.append(", latest_trading_day='").append(latestTradingDay).append('\'');
+    sb.append(", previous_close='").append(previousClose).append('\'');
+    sb.append(", change='").append(change).append('\'');
+    sb.append(", change_percent='").append(changePercent).append('\'');
+    sb.append(", timestamp='").append(timestamp).append('\'');
+    sb.append('}');
+    return sb.toString();
+  }
 }
 
