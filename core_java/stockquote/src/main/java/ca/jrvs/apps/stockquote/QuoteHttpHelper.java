@@ -1,12 +1,13 @@
 package ca.jrvs.apps.stockquote;
 
-import static ca.jrvs.apps.stockquote.JsonParser.toObjectFromJson;
-
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.Date;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import org.json.JSONObject;
 
 public class QuoteHttpHelper {
 
@@ -46,25 +47,23 @@ public class QuoteHttpHelper {
       String respStr = response.body().string();
       System.out.println(respStr);
 
-      // TODO: just use jackson-databind rather than json dependency
-      JSONObject jsonResp = new JSONObject(respStr);
-      // if symbol or api key was bad which gives empty response or error message
-      if (jsonResp.has("Error Message") || jsonResp.getJSONObject("Global Quote").length() == 0) {
+      ObjectMapper objectMapper = new ObjectMapper();
+      try {
+        JsonNode rootNode = objectMapper.readTree(respStr);
+        JsonNode dataNode = rootNode.get("Global Quote");
+        if (dataNode.size() == 0) {
+          throw new IllegalArgumentException("No data was found with this symbol.");
+        }
+        Quote quote = objectMapper.readValue(dataNode.toString(), Quote.class);
+        quote.setTimestamp(new Timestamp(new Date().getTime()));
+        return quote;
+        // Global Quote DNE
+      } catch(NullPointerException e) {
         throw new IllegalArgumentException("No data was found with this symbol.");
       }
-      jsonResp = jsonResp.getJSONObject("Global Quote");
-      jsonResp.put("timestamp", new java.sql.Date(new java.util.Date().getTime()));
-
-      return toObjectFromJson(jsonResp.toString(), Quote.class);
     } catch (IOException e) {
       e.printStackTrace();
+      return null;
     }
-    return null;
-  }
-
-  public static void main(String[] args) {
-    QuoteHttpHelper helper = new QuoteHttpHelper();
-    Quote quote = helper.fetchQuoteInfo("MSFT");
-    System.out.println(quote);
   }
 }

@@ -29,24 +29,11 @@ public class QuoteDao implements CrudDao<Quote, String>  {
 
   @Override
   public Optional<Quote> findById(String s) throws IllegalArgumentException {
-    Quote quote = new Quote();
     try(PreparedStatement statement = this.connection.prepareStatement(GET_ONE);){
       statement.setString(1, s);
       ResultSet rs = statement.executeQuery();
-      rs.next();
-      // not sure if i need to loop since it should just be one result
       if(rs.next()){
-        quote.setTicker(rs.getString("symbol"));
-        quote.setOpen(rs.getDouble("open"));
-        quote.setHigh(rs.getDouble("high"));
-        quote.setLow(rs.getDouble("low"));
-        quote.setPrice(rs.getDouble("price"));
-        quote.setVolume(rs.getInt("volume"));
-        quote.setLatestTradingDay(rs.getDate("latest_trading_day"));
-        quote.setPreviousClose(rs.getDouble("previous_close"));
-        quote.setChange(rs.getDouble("change"));
-        quote.setChangePercent(rs.getString("change_percent"));
-        quote.setTimestamp(rs.getTimestamp("timestamp"));
+        Quote quote = mapToQuote(rs);
         return Optional.of(quote);
       }
     }catch (SQLException e){
@@ -62,18 +49,7 @@ public class QuoteDao implements CrudDao<Quote, String>  {
     try(PreparedStatement statement = this.connection.prepareStatement(SELECT_ALL);){
       ResultSet rs = statement.executeQuery();
       while(rs.next()){
-        Quote quote = new Quote();
-        quote.setTicker(rs.getString("symbol"));
-        quote.setOpen(rs.getDouble("open"));
-        quote.setHigh(rs.getDouble("high"));
-        quote.setLow(rs.getDouble("low"));
-        quote.setPrice(rs.getDouble("price"));
-        quote.setVolume(rs.getInt("volume"));
-        quote.setLatestTradingDay(rs.getDate("latest_trading_day"));
-        quote.setPreviousClose(rs.getDouble("previous_close"));
-        quote.setChange(rs.getDouble("change"));
-        quote.setChangePercent(rs.getString("change_percent"));
-        quote.setTimestamp(rs.getTimestamp("timestamp"));
+        Quote quote = mapToQuote(rs);
         quotes.add(quote);
       }
     }catch(SQLException e){
@@ -85,47 +61,36 @@ public class QuoteDao implements CrudDao<Quote, String>  {
 
   @Override
   public Quote save(Quote dto) {
-    // TODO: adjust all these statement sets into one function
-    if(this.findById(dto.getTicker()).isPresent()) {
-      // assumption that update statement cannot update ticker symbol
-      try(PreparedStatement statement = this.connection.prepareStatement(UPDATE);){
-        statement.setDouble(1, dto.getOpen());
-        statement.setDouble(2, dto.getHigh());
-        statement.setDouble(3, dto.getLow());
-        statement.setDouble(4, dto.getPrice());
-        statement.setDouble(5, dto.getVolume());
-        statement.setDate(6, dto.getLatestTradingDay());
-        statement.setDouble(7, dto.getPreviousClose());
-        statement.setDouble(8, dto.getChange());
-        statement.setString(9, dto.getChangePercent());
-        statement.setTimestamp(10, dto.getTimestamp());
-        statement.setString(11, dto.getTicker());
-        statement.execute();
-        return this.findById(dto.getTicker()).get();
-      }catch(SQLException e){
-        e.printStackTrace();
-        throw new RuntimeException(e);
-      }
-    } else {
-      try (PreparedStatement statement = this.connection.prepareStatement(INSERT);) {
-        statement.setString(1, dto.getTicker());
-        statement.setDouble(2, dto.getOpen());
-        statement.setDouble(3, dto.getHigh());
-        statement.setDouble(4, dto.getLow());
-        statement.setDouble(5, dto.getPrice());
-        statement.setDouble(6, dto.getVolume());
-        statement.setDate(7, dto.getLatestTradingDay());
-        statement.setDouble(8, dto.getPreviousClose());
-        statement.setDouble(9, dto.getChange());
-        statement.setString(10, dto.getChangePercent());
-        statement.setTimestamp(11, dto.getTimestamp());
-        statement.execute();
-        return this.findById(dto.getTicker()).get();
-      } catch (SQLException e) {
-        e.printStackTrace();
-        throw new RuntimeException(e);
-      }
-    }
+    Optional<Quote> existingData = this.findById(dto.getTicker());
+
+    String sql = existingData.isPresent() ? UPDATE : INSERT;
+    // assumption that update statement cannot update ticker symbol
+    try (PreparedStatement statement = this.connection.prepareStatement(sql)) {
+          int ind;
+          if(existingData.isPresent()){
+            ind = 0;
+            statement.setString(11, dto.getTicker());
+          } else {
+            ind = 1;
+            statement.setString(1, dto.getTicker());
+          }
+//          statement.setString(ind+1, dto.getTicker());
+          statement.setDouble(ind+1, dto.getOpen());
+          statement.setDouble(ind+2, dto.getHigh());
+          statement.setDouble(ind+3, dto.getLow());
+          statement.setDouble(ind+4, dto.getPrice());
+          statement.setDouble(ind+5, dto.getVolume());
+          statement.setDate(ind+6, dto.getLatestTradingDay());
+          statement.setDouble(ind+7, dto.getPreviousClose());
+          statement.setDouble(ind+8, dto.getChange());
+          statement.setString(ind+9, dto.getChangePercent());
+          statement.setTimestamp(ind+10, dto.getTimestamp());
+          statement.execute();
+          return this.findById(dto.getTicker()).get();
+        } catch (SQLException e) {
+          e.printStackTrace();
+          throw new RuntimeException(e);
+        }
   }
 
   @Override
@@ -147,5 +112,21 @@ public class QuoteDao implements CrudDao<Quote, String>  {
       e.printStackTrace();
       throw new RuntimeException(e);
     }
+  }
+
+  private Quote mapToQuote(ResultSet rs) throws SQLException {
+    Quote quote = new Quote();
+    quote.setTicker(rs.getString("symbol"));
+    quote.setOpen(rs.getDouble("open"));
+    quote.setHigh(rs.getDouble("high"));
+    quote.setLow(rs.getDouble("low"));
+    quote.setPrice(rs.getDouble("price"));
+    quote.setVolume(rs.getInt("volume"));
+    quote.setLatestTradingDay(rs.getDate("latest_trading_day"));
+    quote.setPreviousClose(rs.getDouble("previous_close"));
+    quote.setChange(rs.getDouble("change"));
+    quote.setChangePercent(rs.getString("change_percent"));
+    quote.setTimestamp(rs.getTimestamp("timestamp"));
+    return quote;
   }
 }
