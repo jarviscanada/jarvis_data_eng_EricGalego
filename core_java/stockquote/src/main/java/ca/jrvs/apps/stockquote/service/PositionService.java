@@ -2,7 +2,6 @@ package ca.jrvs.apps.stockquote.service;
 
 import ca.jrvs.apps.stockquote.Position;
 import ca.jrvs.apps.stockquote.Quote;
-import ca.jrvs.apps.stockquote.QuoteHttpHelper;
 import ca.jrvs.apps.stockquote.dao.PositionDao;
 import ca.jrvs.apps.stockquote.dao.QuoteDao;
 import java.util.Optional;
@@ -10,7 +9,11 @@ import java.util.Optional;
 public class PositionService {
   private PositionDao positionDao;
   private QuoteDao quoteDao;
-  private QuoteHttpHelper quoteHttpHelper;
+
+  public PositionService(PositionDao positionDao, QuoteDao quoteDao) {
+    this.positionDao = positionDao;
+    this.quoteDao = quoteDao;
+  }
 
   /**
    * Processes a buy order and updates the database accordingly
@@ -21,8 +24,7 @@ public class PositionService {
    */
   public Position buy(String ticker, int numberOfShares, double price) {
 
-    QuoteService quoteService = new QuoteService();
-    Optional<Quote> quote = quoteService.fetchQuoteDataFromAPI(ticker);
+    Optional<Quote> quote = quoteDao.findById(ticker);
 
     int volume = quote.get().getVolume();
     if(numberOfShares > volume) {

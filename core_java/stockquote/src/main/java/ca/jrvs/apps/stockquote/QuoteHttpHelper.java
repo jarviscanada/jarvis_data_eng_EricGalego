@@ -11,8 +11,14 @@ import okhttp3.Response;
 
 public class QuoteHttpHelper {
 
-  private String apiKey;
-  private OkHttpClient client;
+  private final OkHttpClient client;
+  private final String apiKey;
+
+  public QuoteHttpHelper(String apiKey, OkHttpClient client) {
+    this.apiKey = apiKey;
+    this.client = client;
+  }
+
   public String respStr = "{\n"
       + "    \"Global Quote\": {\n"
       + "        \"01. symbol\": \"MSFT\",\n"
@@ -36,9 +42,8 @@ public class QuoteHttpHelper {
    * @throws IllegalArgumentException - if no data was found for the given symbol
    */
   public Quote fetchQuoteInfo(String symbol) throws IllegalArgumentException {
-    client = new OkHttpClient();
 
-    String url = "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol="+symbol+"&datatype=json&apikey=a";
+    String url = "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol="+symbol+"&datatype=json&apikey="+this.apiKey;
     Request request = new Request.Builder()
         .url(url)
         .build();

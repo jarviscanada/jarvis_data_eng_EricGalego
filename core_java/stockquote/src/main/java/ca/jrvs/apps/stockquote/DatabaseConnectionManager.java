@@ -9,10 +9,11 @@ public class DatabaseConnectionManager {
   private final String url;
   private final Properties properties;
 
-  public DatabaseConnectionManager(String host, String databaseName,
+  public DatabaseConnectionManager(String host, String databaseName, String port,
       String username, String password){
-    this.url = "jdbc:postgresql://"+host+"/"+databaseName;
+    this.url = "jdbc:postgresql://"+host+":"+port+"/"+databaseName;
     this.properties = new Properties();
+    this.properties.setProperty("port", port);
     this.properties.setProperty("user", username);
     this.properties.setProperty("password", password);
   }
