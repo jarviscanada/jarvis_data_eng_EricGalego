@@ -10,6 +10,8 @@ import java.sql.Date;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
+
+import okhttp3.OkHttpClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,10 +31,10 @@ public class QuoteDao_Test {
   @BeforeEach
   void init() throws SQLException {
     dcm = new DatabaseConnectionManager("localhost",
-        "stock_quote", "postgres", "password");
+        "stock_quote", "5432","postgres", "password");
     connection = dcm.getConnection();
     quoteDao = new QuoteDao(connection);
-    quoteHttpHelper = new QuoteHttpHelper();
+    quoteHttpHelper = new QuoteHttpHelper("api-key", new OkHttpClient());
 
     Quote quote = new Quote( "IBM",186.6300,188.9500,185.9452,
         187.6400,4842840, Date.valueOf("2024-02-16"),186.8700,

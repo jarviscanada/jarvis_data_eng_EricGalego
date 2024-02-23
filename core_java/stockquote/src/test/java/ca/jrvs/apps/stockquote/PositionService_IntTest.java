@@ -13,6 +13,9 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Optional;
+
+import ca.jrvs.apps.stockquote.service.QuoteService;
+import okhttp3.OkHttpClient;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,8 +33,9 @@ public class PositionService_IntTest {
         "stock_quote", "5432", "postgres", "password");
     connection = dcm.getConnection();
     QuoteDao quoteDao = new QuoteDao(connection);
+    QuoteService quoteService = new QuoteService(quoteDao, new QuoteHttpHelper("api-key", new OkHttpClient()));
     positionDao = new PositionDao(connection);
-    positionService = new PositionService(positionDao, quoteDao);
+    positionService = new PositionService(positionDao, quoteService);
 
     Quote quote = new Quote( "IBM",186.6300,188.9500,185.9452,
         187.6400,4842840, Date.valueOf("2024-02-16"),186.8700,
@@ -85,6 +89,8 @@ public class PositionService_IntTest {
   //TODO could have this throw an error but like it just won't find anything with that id
   @Test
   void test_sell_dne() {
+
     positionService.sell("fake");
+
   }
 }

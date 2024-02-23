@@ -27,7 +27,7 @@ public class PositionDao_Test {
   @BeforeAll
   static void setup() throws SQLException {
     dcm = new DatabaseConnectionManager("localhost",
-        "stock_quote", "postgres", "password");
+        "stock_quote", "5432", "postgres", "password");
     connection = dcm.getConnection();
     QuoteDao quoteDao = new QuoteDao(connection);
     positionDao = new PositionDao(connection);

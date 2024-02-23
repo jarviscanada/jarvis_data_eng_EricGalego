@@ -2,6 +2,8 @@ package ca.jrvs.apps.stockquote;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import okhttp3.OkHttpClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,7 +39,7 @@ public class QuoteHttpHelper_Test {
 
     @BeforeEach
     void init() {
-      quoteHttpHelper = new QuoteHttpHelper();
+      quoteHttpHelper = new QuoteHttpHelper("api-key", new OkHttpClient());
     }
 
     @Test
