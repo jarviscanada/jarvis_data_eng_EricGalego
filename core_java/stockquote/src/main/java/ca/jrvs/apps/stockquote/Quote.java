@@ -183,19 +183,18 @@ public class Quote {
 
   @Override
   public String toString() {
-    final StringBuilder sb = new StringBuilder("Quote{");
-    sb.append("symbol='").append(ticker).append('\'');
-    sb.append(", open='").append(open).append('\'');
-    sb.append(", high='").append(high).append('\'');
-    sb.append(", low='").append(low).append('\'');
-    sb.append(", price='").append(price).append('\'');
-    sb.append(", volume='").append(volume).append('\'');
-    sb.append(", latest_trading_day='").append(latestTradingDay).append('\'');
-    sb.append(", previous_close='").append(previousClose).append('\'');
-    sb.append(", change='").append(change).append('\'');
-    sb.append(", change_percent='").append(changePercent).append('\'');
-    sb.append(", timestamp='").append(timestamp).append('\'');
-    sb.append('}');
+    final StringBuilder sb = new StringBuilder();
+    sb.append("Stock='").append(ticker).append("'\n");
+    sb.append("Open='").append(open).append("'\n");
+    sb.append("High='").append(high).append("'\n");
+    sb.append("Low='").append(low).append("'\n");
+    sb.append("Price='").append(price).append("'\n");
+    sb.append("Volume='").append(volume).append("'\n");
+    sb.append("Latest Trading Day='").append(latestTradingDay).append("'\n");
+    sb.append("Previous Close='").append(previousClose).append("'\n");
+    sb.append("Change='").append(change).append("'\n");
+    sb.append("Change Percent='").append(changePercent).append("'\n");
+    sb.append("Timestamp='").append(timestamp).append("'\n");
     return sb.toString();
   }
 }

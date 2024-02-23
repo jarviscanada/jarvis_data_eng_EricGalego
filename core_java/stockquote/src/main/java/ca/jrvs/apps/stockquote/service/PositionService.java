@@ -8,33 +8,36 @@ import java.util.Optional;
 
 public class PositionService {
   private PositionDao positionDao;
-  private QuoteDao quoteDao;
+  private QuoteService quoteService;
 
-  public PositionService(PositionDao positionDao, QuoteDao quoteDao) {
+  public PositionService(PositionDao positionDao, QuoteService quoteService) {
     this.positionDao = positionDao;
-    this.quoteDao = quoteDao;
+    this.quoteService = quoteService;
   }
 
   /**
-   * Processes a buy order and updates the database accordingly
+   * Processes a buy order and updates the database accordingly.
    * @param ticker
    * @param numberOfShares
    * @param price
    * @return The position in our database after processing the buy
    */
-  public Position buy(String ticker, int numberOfShares, double price) {
+  public Position buy(String ticker, int numberOfShares, double price) throws IllegalArgumentException {
 
-    Optional<Quote> quote = quoteDao.findById(ticker);
+    Optional<Quote> quote = quoteService.fetchQuoteDataFromAPI(ticker);
+    if(!quote.isPresent()) {
+      throw new IllegalArgumentException("Invalid ticker.");
+    }
 
     int volume = quote.get().getVolume();
     if(numberOfShares > volume) {
-      throw new RuntimeException("Not enough shares to purchase.");
+      throw new IllegalArgumentException("Not enough shares to purchase.");
     }
     Optional<Position> position = positionDao.findById(ticker);
 
     if(position.isPresent()) {
       position.get().setNumOfShares(position.get().getNumOfShares()+numberOfShares);
-      position.get().setValuePaid(position.get().getValuePaid()+price);
+      position.get().setValuePaid(position.get().getValuePaid()+price*numberOfShares);
       return positionDao.save(position.get());
     } else {
       Position newPosition = new Position();
@@ -51,10 +54,19 @@ public class PositionService {
    */
   public void sell(String ticker) {
 
-    Optional<Quote> quote = quoteDao.findById(ticker);
-    //TODO could change this it's unnecessary unless I end up throwing an error if not present
-    if (quote.isPresent()) {
+    Optional<Position> position = positionDao.findById(ticker);
+    if (position.isPresent()) {
       positionDao.deleteById(ticker);
+      return;
     }
+    System.out.println("You do not own any of these stocks.");
+  }
+
+  /**
+   * Find the position if it exists and prints to the user
+   * @param ticker
+   */
+  public Optional<Position> findbyId(String ticker) {
+    return positionDao.findById(ticker);
   }
 }

@@ -28,32 +28,50 @@ public class StockQuoteController {
 
       System.out.println("Type in a stock to buy or sell: ");
       try {
-        userResponse = br.readLine();
-        Optional<Quote> quote = quoteService.fetchQuoteDataFromAPI(userResponse);
-        System.out.println(quote.get());
+        String stock = br.readLine();
+        try {
+          Optional<Quote> quote = quoteService.fetchQuoteDataFromAPI(stock);
+          Optional<Position> position = positionService.findbyId(stock);
 
-        Quote quoteResp = quote.get();
-
-        System.out.println(
-            "Would you like to buy or sell this stock? (Input buy or sell or press any key to check another stock): ");
-        userResponse = br.readLine();
-
-        if (!userResponse.equals("buy") && !userResponse.equals("sell")) {
-          System.out.println("Type in a stock to buy or sell: ");
-        }
-        if (userResponse.equals("buy")) {
-          System.out.println("Please enter how many shares to purchase: ");
-
-          try {
-            int numberShares = Integer.parseInt(br.readLine());
-            positionService.buy(quoteResp.getTicker(), numberShares,
-                quoteResp.getPrice() * numberShares);
-          } catch (NumberFormatException e) {
-            System.out.println("Please input a valid number of shares.");
-            break;
+          System.out.println("Latest Stock Information: ");
+          System.out.println(quote.get());
+          System.out.println("Your Position with this stock: ");
+          if(position.isPresent()) {
+            System.out.println(position.get());
+          } else {
+            System.out.println("You don't own any of this stock.");
           }
-        } else {
-          positionService.sell(quoteResp.getTicker());
+
+          Quote quoteResp = quote.get();
+          System.out.println(
+                  "Would you like to buy or sell this stock? (Input buy or sell or press any key to check another stock): ");
+          userResponse = br.readLine();
+
+          if (!userResponse.equals("buy") && !userResponse.equals("sell")) {
+            continue;
+          }
+          if (userResponse.equals("buy")) {
+            System.out.println("Please enter how many shares to purchase: ");
+
+            try {
+              int numberShares = Integer.parseInt(br.readLine());
+              positionService.buy(quoteResp.getTicker(), numberShares, quoteResp.getPrice());
+              System.out.printf("You bought: %s %s shares for %s \n", numberShares, quoteResp.getTicker(), quoteResp.getPrice()*numberShares);
+            } catch (NumberFormatException e) {
+              System.out.println("Please input a valid number of shares.");
+            } catch (IllegalArgumentException e) {
+              System.out.println(e.getMessage());
+            }
+          } else {
+            positionService.sell(stock);
+            if(position.isPresent()) {
+              System.out.printf("You sold: %s %s shares for %s \n", position.get().getNumOfShares(), position.get().getTicker(), position.get().getValuePaid());
+              continue;
+            }
+            System.out.println("You didn't have any of this stock to sell.");
+          }
+        } catch(IllegalArgumentException e) {
+          System.out.println("Please type in a valid stock.");
         }
       } catch (IOException e) {
         throw new RuntimeException(e);
