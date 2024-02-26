@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static ca.jrvs.apps.stockquote.Main.logger;
+
 public class QuoteDao implements CrudDao<Quote, String>  {
 
   private Connection connection;
@@ -37,7 +39,7 @@ public class QuoteDao implements CrudDao<Quote, String>  {
         return Optional.of(quote);
       }
     }catch (SQLException e){
-      e.printStackTrace();
+      logger.error(e.getMessage());
       throw new RuntimeException(e);
     }
     return Optional.empty();
@@ -53,7 +55,7 @@ public class QuoteDao implements CrudDao<Quote, String>  {
         quotes.add(quote);
       }
     }catch(SQLException e){
-      e.printStackTrace();
+      logger.error(e.getMessage());
       throw new RuntimeException(e);
     }
     return quotes;
@@ -74,7 +76,6 @@ public class QuoteDao implements CrudDao<Quote, String>  {
             ind = 1;
             statement.setString(1, dto.getTicker());
           }
-//          statement.setString(ind+1, dto.getTicker());
           statement.setDouble(ind+1, dto.getOpen());
           statement.setDouble(ind+2, dto.getHigh());
           statement.setDouble(ind+3, dto.getLow());
@@ -88,7 +89,7 @@ public class QuoteDao implements CrudDao<Quote, String>  {
           statement.execute();
           return this.findById(dto.getTicker()).get();
         } catch (SQLException e) {
-          e.printStackTrace();
+          logger.error(e.getMessage());
           throw new RuntimeException(e);
         }
   }
@@ -99,7 +100,7 @@ public class QuoteDao implements CrudDao<Quote, String>  {
       statement.setString(1, s);
       statement.execute();
     }catch (SQLException e){
-      e.printStackTrace();
+      logger.error(e.getMessage());
       throw new RuntimeException(e);
     }
   }
@@ -109,7 +110,7 @@ public class QuoteDao implements CrudDao<Quote, String>  {
     try(PreparedStatement statement = this.connection.prepareStatement(DELETE_ALL);){
       statement.execute();
     }catch (SQLException e){
-      e.printStackTrace();
+      logger.error(e.getMessage());
       throw new RuntimeException(e);
     }
   }

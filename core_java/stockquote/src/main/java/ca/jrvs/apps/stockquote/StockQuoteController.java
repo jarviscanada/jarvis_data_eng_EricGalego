@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Optional;
 
+import static ca.jrvs.apps.stockquote.Main.logger;
+
 public class StockQuoteController {
 
   private QuoteService quoteService;
@@ -74,6 +76,7 @@ public class StockQuoteController {
           System.out.println("Please type in a valid stock.");
         }
       } catch (IOException e) {
+        logger.error(e.getMessage());
         throw new RuntimeException(e);
       }
     }

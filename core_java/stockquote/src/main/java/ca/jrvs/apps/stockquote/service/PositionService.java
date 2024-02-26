@@ -6,6 +6,8 @@ import ca.jrvs.apps.stockquote.dao.PositionDao;
 import ca.jrvs.apps.stockquote.dao.QuoteDao;
 import java.util.Optional;
 
+import static ca.jrvs.apps.stockquote.Main.logger;
+
 public class PositionService {
   private PositionDao positionDao;
   private QuoteService quoteService;
@@ -26,11 +28,13 @@ public class PositionService {
 
     Optional<Quote> quote = quoteService.fetchQuoteDataFromAPI(ticker);
     if(!quote.isPresent()) {
+      logger.error("Invalid ticker: {}", ticker);
       throw new IllegalArgumentException("Invalid ticker.");
     }
 
     int volume = quote.get().getVolume();
     if(numberOfShares > volume) {
+      logger.error("Not enough shares of: {}", ticker);
       throw new IllegalArgumentException("Not enough shares to purchase.");
     }
     Optional<Position> position = positionDao.findById(ticker);

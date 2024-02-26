@@ -13,16 +13,20 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 import okhttp3.OkHttpClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Main {
 
   static StockQuoteController stockQuoteController;
+  public final static Logger logger = LoggerFactory.getLogger(Main.class);
 
   public static void main(String[] args) {
     Map<String, String> properties = parseProperties();
     OkHttpClient client = new OkHttpClient();
     try (Connection c = new DatabaseConnectionManager(properties.get("server"), properties.get("database"),
         properties.get("port"), properties.get("username"), properties.get("password")).getConnection()) {
+      logger.info("Initializing services.");
       QuoteDao qRepo = new QuoteDao(c);
       PositionDao pRepo = new PositionDao(c);
       QuoteHttpHelper rcon = new QuoteHttpHelper(properties.get("api-key"), client);
@@ -31,7 +35,7 @@ public class Main {
       StockQuoteController con = new StockQuoteController(sQuote, sPos);
       con.initClient();
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage());
     }
   }
 
@@ -39,9 +43,10 @@ public class Main {
     Map<String, String> properties = new HashMap<>();
     Scanner sc;
     try {
+      logger.info("Parsing properties file.");
       sc = new Scanner(new File("src/main/resources/properties.txt"));
     } catch (FileNotFoundException e) {
-      System.out.println("Please ensure properties.txt exists and is in the resources folder.");
+      logger.error("src/main/resources/properties.txt file does not exist.");
       throw new RuntimeException(e);
     }
 

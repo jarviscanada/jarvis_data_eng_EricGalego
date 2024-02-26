@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static ca.jrvs.apps.stockquote.Main.logger;
+
 public class PositionDao implements CrudDao<Position, String> {
 
   private Connection connection;
@@ -33,6 +35,7 @@ public class PositionDao implements CrudDao<Position, String> {
     String sql = existingData.isPresent() ? UPDATE : INSERT;
     // assumption that update statement cannot update ticker symbol
     try (PreparedStatement statement = this.connection.prepareStatement(sql)) {
+      logger.info("Saving Position {}", dto.getTicker());
       int ind;
       if(existingData.isPresent()){
         ind = 0;
@@ -46,7 +49,7 @@ public class PositionDao implements CrudDao<Position, String> {
       statement.execute();
       return this.findById(dto.getTicker()).get();
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage());
       throw new RuntimeException(e);
     }
   }
@@ -61,7 +64,7 @@ public class PositionDao implements CrudDao<Position, String> {
         return Optional.of(position);
       }
     }catch (SQLException e){
-      e.printStackTrace();
+      logger.error(e.getMessage());
       throw new RuntimeException(e);
     }
     return Optional.empty();
@@ -77,7 +80,7 @@ public class PositionDao implements CrudDao<Position, String> {
         positions.add(position);
       }
     }catch(SQLException e){
-      e.printStackTrace();
+      logger.error(e.getMessage());
       throw new RuntimeException(e);
     }
     return positions;
@@ -91,7 +94,7 @@ public class PositionDao implements CrudDao<Position, String> {
       statement.setString(1, s);
       statement.execute();
     }catch (SQLException e){
-      e.printStackTrace();
+      logger.error(e.getMessage());
       throw new RuntimeException(e);
     }
   }
@@ -101,7 +104,7 @@ public class PositionDao implements CrudDao<Position, String> {
     try(PreparedStatement statement = this.connection.prepareStatement(DELETE_ALL);){
       statement.execute();
     }catch (SQLException e){
-      e.printStackTrace();
+      logger.error(e.getMessage());
       throw new RuntimeException(e);
     }
   }

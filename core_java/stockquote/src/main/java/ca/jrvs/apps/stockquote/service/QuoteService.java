@@ -5,6 +5,8 @@ import ca.jrvs.apps.stockquote.QuoteHttpHelper;
 import ca.jrvs.apps.stockquote.dao.QuoteDao;
 import java.util.Optional;
 
+import static ca.jrvs.apps.stockquote.Main.logger;
+
 public class QuoteService {
   private QuoteDao dao;
   private QuoteHttpHelper httpHelper;
@@ -24,8 +26,7 @@ public class QuoteService {
       Quote quote = httpHelper.fetchQuoteInfo(ticker);
       return Optional.ofNullable(dao.save(quote));
     } catch (IllegalArgumentException e) {
-      //TODO adjust logging
-      e.printStackTrace();
+      logger.error(e.getMessage());
       return Optional.empty();
     }
   }

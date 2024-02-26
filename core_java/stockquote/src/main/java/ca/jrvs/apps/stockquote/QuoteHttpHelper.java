@@ -9,6 +9,9 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+import static ca.jrvs.apps.stockquote.Main.logger;
+
+
 public class QuoteHttpHelper {
 
   private final OkHttpClient client;
@@ -48,15 +51,17 @@ public class QuoteHttpHelper {
         .url(url)
         .build();
     try {
+      logger.info("Fetching quote info on {}", symbol);
       Response response = client.newCall(request).execute();
       String respStr = response.body().string();
-      System.out.println(respStr);
+      logger.info("Found info: {}", respStr);
 
       ObjectMapper objectMapper = new ObjectMapper();
       try {
         JsonNode rootNode = objectMapper.readTree(respStr);
         JsonNode dataNode = rootNode.get("Global Quote");
-        if (dataNode.size() == 0) {
+        if (dataNode.isEmpty()) {
+          logger.error("No data found with this symbol: {}", symbol);
           throw new IllegalArgumentException("No data was found with this symbol.");
         }
         Quote quote = objectMapper.readValue(dataNode.toString(), Quote.class);
@@ -64,10 +69,11 @@ public class QuoteHttpHelper {
         return quote;
         // Global Quote DNE
       } catch(NullPointerException e) {
+        logger.error("No data found with this symbol: {}", symbol);
         throw new IllegalArgumentException("No data was found with this symbol.");
       }
     } catch (IOException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage());
       return null;
     }
   }
