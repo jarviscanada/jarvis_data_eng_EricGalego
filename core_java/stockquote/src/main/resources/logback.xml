@@ -13,10 +13,10 @@
         </encoder>
     </appender>
 
-    <logger level="INFO">
+    <logger name="ca.jrvs.apps.stockquote" level="INFO">
         <appender-ref ref="INFO_FILE"/>
     </logger>
-    <logger level="ERROR">
+    <logger name="ca.jrvs.apps.stockquote" level="ERROR">
         <appender-ref ref="ERROR_FILE"/>
     </logger>
 </configuration>
