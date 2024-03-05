@@ -3,7 +3,6 @@ package ca.jrvs.apps.stockquote.service;
 import ca.jrvs.apps.stockquote.Position;
 import ca.jrvs.apps.stockquote.Quote;
 import ca.jrvs.apps.stockquote.dao.PositionDao;
-import ca.jrvs.apps.stockquote.dao.QuoteDao;
 import java.util.Optional;
 
 import static ca.jrvs.apps.stockquote.Main.logger;

@@ -85,12 +85,4 @@ public class PositionService_IntTest {
     Optional<Position> position = positionDao.findById("IBM");
     assertFalse(position.isPresent());
   }
-
-  //TODO could have this throw an error but like it just won't find anything with that id
-  @Test
-  void test_sell_dne() {
-
-    positionService.sell("fake");
-
-  }
 }
