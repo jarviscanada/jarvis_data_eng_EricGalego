@@ -1,0 +1,6 @@
+server:localhost
+database:stock_quote
+port:5432
+username:postgres
+password:password
+api-key:insert-api-key
