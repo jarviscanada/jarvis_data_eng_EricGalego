@@ -59,7 +59,7 @@ jarvis_projects:
       charge of the cluster of Linux machines to easily access usage statistics from the PSQL database and utilize SQL
       queries to collect important statistics such as the average amount of idle CPU time across various machines over
       select periods.
-  - name: "Core Java Apps"
+  - name: "Java Grep Application"
     git_url: "/core_java/grep"
     description: >
       Designed and developed an application to mimic the functionality of the grep command line utility in Linux.
@@ -67,6 +67,15 @@ jarvis_projects:
       provided directory. The application leverages a combination of Java 8, Docker, streams/lambdas,
       regex, and SLF4j. This provides users with a quick and efficient way to locate and extract information 
       from large sets of text-based data.
+  - name: "Java Stockquote Application"
+    git_url: "/core_java/stockquote"
+    description: >
+      Designed and developed an application that allows users to buy and sell stocks through a CLI to 
+      simulate a stock wallet. The application integrates with APIs to access real-time stock data, 
+      empowering users to make buying or selling decisions based on the latest market information. 
+      New data about stocks are updated in a PSQL database as well as the users current stock wallet. 
+      This application leverages a combination of Java 8, JDBC, PostgreSQL, Docker, Maven as well as
+      JUnit and Mockito for testing.
 
 # List of personal or academic projects
 # Feel free to add more projects

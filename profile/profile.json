@@ -37,7 +37,12 @@
     {
       "description": "Designed and developed an application to mimic the functionality of the grep command line utility in Linux. This project is designed to collect and report lines that match a specified regex recursively in a provided directory. The application leverages a combination of Java 8, Docker, streams/lambdas, regex, and SLF4j. This provides users with a quick and efficient way to locate and extract information  from large sets of text-based data.\n",
       "git_url": "/core_java/grep",
-      "name": "Core Java Apps"
+      "name": "Java Grep Application"
+    },
+    {
+      "description": "Designed and developed an application that allows users to buy and sell stocks through a CLI to  simulate a stock wallet. The application integrates with APIs to access real-time stock data,  empowering users to make buying or selling decisions based on the latest market information.  New data about stocks are updated in a PSQL database as well as the users current stock wallet.  This application leverages a combination of Java 8, JDBC, PostgreSQL, Docker, Maven as well as JUnit and Mockito for testing.\n",
+      "git_url": "/core_java/stockquote",
+      "name": "Java Stockquote Application"
     }
   ],
   "name": "Eric Galego",
